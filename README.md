@@ -25,7 +25,7 @@ A complete **Next.js** event management website and admin booking platform built
 - Next.js App Router
 - React + TypeScript
 - Prisma ORM
-- SQLite for easy local development
+- PostgreSQL (Neon) for production / SQLite for local development
 - JWT session cookie with `jose`
 - `bcryptjs` password hashing
 - Lucide icons
@@ -76,6 +76,10 @@ For local development the project uses SQLite:
 
 `DATABASE_URL="file:./dev.db"`
 
+For production (Vercel) the project uses PostgreSQL hosted on Neon:
+
+`DATABASE_URL="postgresql://user:password@host.neon.tech/dbname?sslmode=require"`
+
 Commands:
 
 ```bash
@@ -96,7 +100,7 @@ Login → Dashboard → View New Booking → Review Client/Event Details → Cha
 
 ## Production deployment
 
-The included SQLite configuration is intended for local development/demo use. For production hosting such as Vercel, use a hosted PostgreSQL database and change the Prisma datasource provider/connection URL accordingly. Then run Prisma migrations/deployment during the build.
+The project uses SQLite for local development and PostgreSQL (Neon) for production on Vercel. The Prisma schema is configured for PostgreSQL. When deploying to Vercel, set the `DATABASE_URL` environment variable to your Neon PostgreSQL connection string. The build script runs `prisma db push` to create/update the database schema automatically.
 
 Recommended environment variables:
 

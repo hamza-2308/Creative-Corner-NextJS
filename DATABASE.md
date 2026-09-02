@@ -1,5 +1,10 @@
 # Database / System Documentation
 
+## Database provider
+
+- **Local development:** SQLite (`DATABASE_URL="file:./dev.db"`)
+- **Production (Vercel):** PostgreSQL on Neon (`DATABASE_URL="postgresql://user:password@host.neon.tech/dbname?sslmode=require"`)
+
 ## Entity relationship overview
 
 **Admin**
