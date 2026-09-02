@@ -1,0 +1,2 @@
+import { NextResponse } from "next/server"; import bcrypt from "bcryptjs"; import { db } from "@/lib/db"; import { createAdminSession } from "@/lib/auth";
+export async function POST(req:Request){const {email,password}=await req.json();const admin=await db.admin.findUnique({where:{email}});if(!admin||!(await bcrypt.compare(password,admin.passwordHash)))return NextResponse.json({error:"Invalid email or password."},{status:401});await createAdminSession(admin.id);return NextResponse.json({ok:true})}

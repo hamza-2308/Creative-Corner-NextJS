@@ -1,0 +1,191 @@
+"use client";
+import { useRef, useState } from "react";
+import { UploadCloud, PartyPopper, Pencil, Eye, EyeOff, Trash2, Loader2 } from "lucide-react";
+
+const MAX_SIZE = 8 * 1024 * 1024;
+const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+
+export default function EventsManager({ items, onRefresh }: { items: any[]; onRefresh?: () => void }) {
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [services, setServices] = useState("");
+  const [image, setImage] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [progress, setProgress] = useState("");
+  const [msg, setMsg] = useState("");
+  const [err, setErr] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function pickFile(e: any) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!ALLOWED_TYPES.includes(f.type)) { setErr(`"${f.name}" supported format nahi hai (JPG, PNG, WEBP, GIF).`); return; }
+    if (f.size > MAX_SIZE) { setErr(`"${f.name}" 8MB se bari hai.`); return; }
+    setErr("");
+    setFile(f);
+    setPreview(URL.createObjectURL(f));
+  }
+
+  async function uploadOne(f: File): Promise<string> {
+    const fd = new FormData();
+    fd.append("file", f);
+    const res = await fetch("/api/upload", { method: "POST", body: fd });
+    let payload: any = null;
+    try { payload = await res.json(); } catch {}
+    if (!res.ok) throw new Error(payload?.error || `Upload failed (status ${res.status}).`);
+    if (!payload?.url) throw new Error("Server ne image URL wapis nahi bheja.");
+    return payload.url as string;
+  }
+
+  function resetForm() {
+    setName(""); setType(""); setDate(""); setLocation(""); setDescription(""); setServices(""); setImage(""); setFile(null); setPreview(""); setEditingId(null);
+  }
+
+  async function save(e: any) {
+    e.preventDefault();
+    setMsg(""); setErr("");
+    if (!name.trim() || !type.trim() || !date || !location.trim() || !description.trim()) { setErr("Sab fields zaroori hain (services optional)."); return; }
+    if (!editingId && !file) { setErr("Ek image select karein."); return; }
+
+    setSaving(true);
+    try {
+      let img = image;
+      if (file) { setProgress("Image upload ho rahi hai..."); img = await uploadOne(file); }
+      const payload = { name, type, date: new Date(date).toISOString(), location, description, services, images: img, completed: true };
+
+      if (editingId) {
+        const r = await fetch("/api/content/events", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingId, ...payload }),
+        });
+        if (!r.ok) throw new Error((await r.json().catch(() => ({})))?.error || "Update fail ho gaya.");
+        setMsg("Event update ho gaya.");
+      } else {
+        const r = await fetch("/api/events", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!r.ok) throw new Error((await r.json().catch(() => ({})))?.error || "Event save nahi hua.");
+        setMsg("Naya event add ho gaya.");
+      }
+      resetForm();
+      if (onRefresh) onRefresh();
+    } catch (e: any) {
+      setErr(e?.message || "Save nahi ho saka.");
+    } finally {
+      setSaving(false);
+      setProgress("");
+    }
+  }
+
+  function edit(item: any) {
+    setEditingId(item.id);
+    setName(item.name);
+    setType(item.type);
+    setDate(new Date(item.date).toISOString().slice(0, 10));
+    setLocation(item.location);
+    setDescription(item.description);
+    setServices(item.services);
+    setImage(item.images);
+    setPreview(item.images);
+    setFile(null);
+    setMsg(""); setErr("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function toggleCompleted(item: any) {
+    await fetch("/api/content/events", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: item.id, completed: !item.completed }),
+    });
+    if (onRefresh) onRefresh();
+  }
+
+  async function remove(item: any) {
+    if (!confirm(`"${item.name}" ko delete karna hai?`)) return;
+    await fetch("/api/content/events", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: item.id }),
+    });
+    if (onRefresh) onRefresh();
+  }
+
+  return (
+    <div className="admin-card gallery-manager">
+      <div className="gallery-manager-head">
+        <div className="gallery-manager-head-icon"><PartyPopper size={20} /></div>
+        <div>
+          <h3 style={{ margin: 0 }}>{editingId ? "Edit Event" : "Add New Event"}</h3>
+          <p className="muted" style={{ margin: "2px 0 0", fontSize: ".8rem" }}>Yahan se jo image lagayenge wahi Events / Portfolio page par show hogi.</p>
+        </div>
+      </div>
+
+      {msg && <div className="alert alert-success">{msg}</div>}
+      {err && <div className="alert alert-error">{err}</div>}
+
+      <form onSubmit={save} className="gallery-form">
+        <div className="form-grid">
+          <div className="field"><label>Event Name</label><input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Luxury Wedding – Islamabad" /></div>
+          <div className="field"><label>Type</label><input value={type} onChange={e => setType(e.target.value)} placeholder="Wedding / Corporate / Birthday..." /></div>
+          <div className="field"><label>Date</label><input type="date" value={date} onChange={e => setDate(e.target.value)} /></div>
+          <div className="field"><label>Location</label><input value={location} onChange={e => setLocation(e.target.value)} placeholder="Islamabad" /></div>
+          <div className="field full"><label>Description</label><textarea value={description} onChange={e => setDescription(e.target.value)} /></div>
+          <div className="field full"><label>Services (separate with |)</label><textarea value={services} onChange={e => setServices(e.target.value)} placeholder="Wedding Planning|Decoration Services|Photography" /></div>
+
+          <div className="field full">
+            <label>Image</label>
+            <div className="dropzone" onClick={() => inputRef.current?.click()}>
+              <UploadCloud size={22} />
+              <p><b>Click karein</b> image select karne ke liye</p>
+              <span className="muted" style={{ fontSize: ".72rem" }}>JPG, PNG, WEBP, GIF · max 8MB</span>
+              <input ref={inputRef} type="file" accept="image/*" onChange={pickFile} style={{ display: "none" }} />
+            </div>
+            {preview && <div className="gallery-preview-wrap"><img src={preview} alt="Preview" className="gallery-preview" /></div>}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: 10, marginTop: 15 }}>
+          <button className="btn btn-primary" style={{ justifyContent: "center" }} disabled={saving}>
+            {saving ? <><Loader2 size={16} className="spin" /> {progress || "Saving..."}</> : editingId ? "Save Changes" : "Add Event"}
+          </button>
+          {editingId && <button type="button" className="btn btn-light" onClick={() => { resetForm(); setMsg(""); setErr(""); }} disabled={saving}>Cancel</button>}
+        </div>
+      </form>
+
+      <hr style={{ border: "none", borderTop: "1px solid var(--line)", margin: "24px 0" }} />
+      <h3>All Events ({items.length})</h3>
+      {items.length ? (
+        <div className="gallery-admin-grid">
+          {items.map(e => (
+            <div className="gallery-admin-card" key={e.id}>
+              <div className="gallery-admin-img">
+                <img src={e.images} alt={e.name} />
+                {!e.completed && <span className="gallery-hidden-badge">Hidden</span>}
+              </div>
+              <div className="gallery-admin-body">
+                <b>{e.name}</b>
+                <span className="tag">{e.type}</span>
+                <p className="muted" style={{ fontSize: ".75rem", margin: "6px 0 0" }}>{new Date(e.date).toLocaleDateString()} · {e.location}</p>
+              </div>
+              <div className="gallery-admin-actions">
+                <button className="btn btn-light btn-sm" onClick={() => edit(e)}><Pencil size={13} /> Edit</button>
+                <button className="btn btn-light btn-sm" onClick={() => toggleCompleted(e)}>{e.completed ? <><EyeOff size={13} /> Hide</> : <><Eye size={13} /> Show</>}</button>
+                <button className="btn btn-light btn-sm btn-danger" onClick={() => remove(e)}><Trash2 size={13} /> Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : <div className="empty">No events found.</div>}
+    </div>
+  );
+}

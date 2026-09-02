@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460">
+  <defs>
+    <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2b202e"/>
+      <stop offset="1" stop-color="#755b54"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="460" rx="26" fill="url(#tg)"/>
+  <circle cx="680" cy="90" r="110" fill="#ffffff14"/>
+  <circle cx="90" cy="380" r="140" fill="#00000022"/>
+
+  <!-- clipboard / planning icon -->
+  <rect x="330" y="120" width="140" height="180" rx="14" fill="#fffaf5"/>
+  <rect x="365" y="105" width="70" height="26" rx="8" fill="#e7c98d"/>
+  <rect x="350" y="160" width="110" height="10" rx="5" fill="#d9b56e"/>
+  <rect x="350" y="185" width="90" height="10" rx="5" fill="#e0d6cd"/>
+  <rect x="350" y="210" width="100" height="10" rx="5" fill="#e0d6cd"/>
+  <rect x="350" y="235" width="70" height="10" rx="5" fill="#e0d6cd"/>
+  <circle cx="356" cy="163" r="4" fill="#c69b52"/>
+  <circle cx="356" cy="188" r="4" fill="#c69b52"/>
+  <circle cx="356" cy="213" r="4" fill="#c69b52"/>
+
+  <!-- people dots representing coordination -->
+  <g fill="#e7c98d">
+    <circle cx="190" cy="330" r="20"/>
+    <circle cx="250" cy="300" r="20"/>
+    <circle cx="560" cy="300" r="20"/>
+    <circle cx="620" cy="330" r="20"/>
+  </g>
+  <g fill="#ffffff33">
+    <rect x="170" y="350" width="40" height="55" rx="14"/>
+    <rect x="230" y="320" width="40" height="55" rx="14"/>
+    <rect x="540" y="320" width="40" height="55" rx="14"/>
+    <rect x="600" y="350" width="40" height="55" rx="14"/>
+  </g>
+
+  <path d="M280 320 Q400 260 520 320" stroke="#ffe9b3" stroke-width="3" stroke-dasharray="6 8" fill="none" opacity=".8"/>
+
+  <text x="50%" y="88%" text-anchor="middle" fill="#ffffffd9" font-family="Georgia,serif" font-size="24">Planned with care, delivered with precision.</text>
+</svg>

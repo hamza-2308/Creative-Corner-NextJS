@@ -1,0 +1,2 @@
+import { NextResponse } from "next/server"; import { db } from "@/lib/db";
+export async function POST(req:Request){try{const b=await req.json();if(!b.name||!b.email||!b.subject||!b.message)return NextResponse.json({error:"Please complete required fields."},{status:400});const x=await db.inquiry.create({data:{name:b.name,email:b.email,phone:b.phone,subject:b.subject,message:b.message}});return NextResponse.json(x)}catch{return NextResponse.json({error:"Inquiry could not be sent."},{status:500})}}
