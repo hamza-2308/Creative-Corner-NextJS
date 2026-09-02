@@ -45,6 +45,7 @@
   .page-hero{padding-top:120px}
   .section-head{display:block}
   .about-art{min-height:320px}
+  .about-art img{min-height:280px;max-height:340px}
   .package-card.featured{transform:none}
   .admin-nav-links a{min-width:100%}
   .admin-top{flex-direction:column;align-items:flex-start}
