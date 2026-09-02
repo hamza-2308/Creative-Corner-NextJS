@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { db } from "@/lib/db";
 import { getAdminSession } from "@/lib/auth";
 
 const ALLOWED_TYPES: Record<string, string> = {
@@ -43,13 +42,14 @@ export async function POST(req: Request) {
     }
 
     const bytes = Buffer.from(await file.arrayBuffer());
-    const name = `gallery-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${extFromMime}`;
-    const dir = path.join(process.cwd(), "public", "images", "gallery");
+    const dataBase64 = bytes.toString("base64");
 
-    await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, name), bytes);
+    // Store image in Neon PostgreSQL database so it persists on Vercel
+    const stored = await db.storedImage.create({
+      data: { data: dataBase64, mimeType: mime },
+    });
 
-    return NextResponse.json({ url: `/images/gallery/${name}` });
+    return NextResponse.json({ url: `/api/image/${stored.id}` });
   } catch (e: any) {
     console.error("Upload error:", e);
     return NextResponse.json(

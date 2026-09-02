@@ -95,6 +95,13 @@ model GalleryItem {
   updatedAt DateTime @updatedAt
 }
 
+model StoredImage {
+  id        String   @id @default(cuid())
+  data      String
+  mimeType  String
+  createdAt DateTime @default(now())
+}
+
 model AboutContent {
   id          String   @id @default(cuid())
   storyTitle  String   @default("Small ideas can become extraordinary moments.")
