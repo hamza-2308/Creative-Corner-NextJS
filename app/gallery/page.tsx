@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
 import GalleryGrid from "@/components/GalleryGrid";
+
+export const dynamic = "force-dynamic";
 export default async function Gallery(){
   const items=await db.galleryItem.findMany({where:{visible:true},orderBy:{createdAt:"desc"}});
   return <>

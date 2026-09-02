@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, ShieldCheck, Clock3, Gem, Camera, Users } from "lucide-react";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const [services, packages, gallery, events] = await Promise.all([
     db.service.findMany({where:{active:true},take:6}),
@@ -23,7 +25,7 @@ export default async function Home() {
     </div></section>
 
     <section className="section" style={{background:"#fff"}}><div className="container about">
-      <div className="about-art"></div><div><div className="eyebrow">About Creative Corner</div><h2 className="serif" style={{fontSize:"clamp(2.2rem,4vw,3.8rem)"}}>From first idea to final applause.</h2><p className="muted" style={{lineHeight:1.9}}>We bring planning, creativity and professional coordination together so you can enjoy your event instead of managing it. Our team handles the details, vendors, schedules, production and guest experience.</p>
+      <div className="about-art"><img src="/images/about-story.svg" alt="Creative Corner event styling" /></div><div><div className="eyebrow">About Creative Corner</div><h2 className="serif" style={{fontSize:"clamp(2.2rem,4vw,3.8rem)"}}>From first idea to final applause.</h2><p className="muted" style={{lineHeight:1.9}}>We bring planning, creativity and professional coordination together so you can enjoy your event instead of managing it. Our team handles the details, vendors, schedules, production and guest experience.</p>
       <div className="stats"><div className="stat"><strong>8+</strong><span className="muted">Years experience</span></div><div className="stat"><strong>250+</strong><span className="muted">Events managed</span></div><div className="stat"><strong>98%</strong><span className="muted">Happy clients</span></div><div className="stat"><strong>24/7</strong><span className="muted">Event support</span></div></div>
       <br/><Link href="/about" className="btn btn-primary">Our Story <ArrowRight size={16}/></Link></div>
     </div></section>

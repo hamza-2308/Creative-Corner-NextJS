@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const defaults = {
   storyTitle: "Small ideas can become extraordinary moments.",
   storyText1: "Creative Corner brings together event planners, designers, coordinators and production partners to deliver celebrations and business events with confidence.",
