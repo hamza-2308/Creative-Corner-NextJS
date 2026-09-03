@@ -3,6 +3,14 @@ import { useRef, useState } from "react";
 import { UploadCloud, PartyPopper, Pencil, Eye, EyeOff, Trash2, Loader2 } from "lucide-react";
 import { uploadImage } from "@/lib/uploadImage";
 
+// 📸 EVENT IMAGE MANAGEMENT:
+// - Images are uploaded via /api/upload and stored in the Neon PostgreSQL database (StoredImage table).
+// - The returned URL (/api/image/{id}) is saved in the Event.images field.
+// - The Events page (/events) renders the image from the Event.images field.
+// - To change an event's photo: click Edit, select a new image, and Save Changes.
+// - If images are not showing, verify the Event.images value in the database points to a valid URL
+//   (either /api/image/{id} for DB-stored uploads or /images/... for files in the public folder).
+
 const types = ["Wedding", "Corporate", "Birthday", "Engagement", "Conference", "Other"];
 
 export default function EventManager({ items, onRefresh }: { items: any[]; onRefresh?: () => void }) {
