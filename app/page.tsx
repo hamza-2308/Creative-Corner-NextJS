@@ -16,7 +16,7 @@ export default async function Home() {
       <div className="eyebrow">Creative Corner · Event Management</div>
       <h1>We turn your special moments into unforgettable memories.</h1>
       <p>Professional event planning and management for weddings, corporate events, parties, conferences and every celebration worth remembering.</p>
-      <div className="hero-actions"><Link className="btn btn-gold" href="/booking">Book Your Event <ArrowRight size={17}/></Link><Link className="btn btn-light" href="/gallery">Explore Our Work</Link></div>
+      <div className="hero-actions"><Link className="btn btn-gold" href="/booking">Book Your Event <ArrowRight size={17}/></Link><Link className="btn btn-gold" href="/gallery">Explore Our Work</Link></div>
     </div></section>
 
     <section className="section"><div className="container">
