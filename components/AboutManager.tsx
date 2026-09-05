@@ -20,9 +20,19 @@ export default function AboutManager({ onRefresh }: { onRefresh?: () => void }) 
 
   useEffect(() => {
     fetch("/api/about").then(r => r.json()).then(d => {
-      setForm(d);
-      setStoryPreview(d.storyImage);
-      setTeamPreview(d.teamImage);
+      const data = d || {};
+      setForm({
+        storyTitle: data.storyTitle || "Small ideas can become extraordinary moments.",
+        storyText1: data.storyText1 || "Creative Corner brings together event planners, designers, coordinators and production partners to deliver celebrations and business events with confidence.",
+        storyText2: data.storyText2 || "Our mission is simple: create meaningful experiences without putting the pressure of coordination on our clients.",
+        storyImage: data.storyImage || "/images/about-story.svg",
+        teamImage: data.teamImage || "/images/about-team.svg",
+        mission: data.mission || "Deliver thoughtful, reliable and creative event experiences.",
+        vision: data.vision || "Become the trusted event partner for celebrations and businesses.",
+        whyUs: data.whyUs || "Transparent planning, professional teams and complete coordination.",
+      });
+      setStoryPreview(data.storyImage || "/images/about-story.svg");
+      setTeamPreview(data.teamImage || "/images/about-team.svg");
     });
   }, []);
 

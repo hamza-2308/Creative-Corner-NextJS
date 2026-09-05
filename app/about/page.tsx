@@ -18,8 +18,23 @@ export default async function About() {
 
   return (
     <>
-      <section className="page-hero">
-        <div className="container">
+      <section className="page-hero about-hero">
+        <div className="hero-3d-bg">
+          <div className="hero-3d-sphere s1" />
+          <div className="hero-3d-sphere s2" />
+          <div className="hero-3d-sphere s3" />
+          <div className="hero-3d-ring r1" />
+          <div className="hero-3d-ring r2" />
+          <div className="hero-3d-cube c1" />
+          <div className="hero-3d-cube c2" />
+          <div className="hero-3d-pyramid p1" />
+          <div className="hero-3d-pyramid p2" />
+          <div className="hero-3d-diamond d1" />
+          <div className="hero-3d-diamond d2" />
+          <div className="hero-3d-sparkle" />
+        </div>
+        <div className="about-hero-overlay" />
+        <div className="container about-hero-content">
           <div className="eyebrow">About Creative Corner</div>
           <h1>We make the details feel effortless.</h1>
           <p style={{ maxWidth: 650, lineHeight: 1.8 }}>

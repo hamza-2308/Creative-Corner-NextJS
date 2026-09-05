@@ -112,9 +112,7 @@ export function LoginForm() {
 }
 
 export function AdminDashboard() {
-  const [tab, setTab] = useState(
-    typeof window !== "undefined" ? new URLSearchParams(location.search).get("tab") || "dashboard" : "dashboard"
-  );
+  const [tab, setTab] = useState("dashboard");
   const [data, setData] = useState<any>({
     bookings: [], clients: [], services: [], packages: [], events: [], gallery: [], inquiries: [],
   });
@@ -216,6 +214,7 @@ export function AdminDashboard() {
             </div>
           )}
           {tab === "clients" && <SimpleTable title="Clients" rows={data.clients} cols={["name", "email", "phone", "createdAt"]} />}
+          {tab === "about" && <AboutManager />}
           {tab === "services" && <ServiceManager items={data.services} onRefresh={refreshServices} />}
           {tab === "packages" && <PackageManager items={data.packages} onRefresh={refreshPackages} />}
           {tab === "events" && <EventManager items={data.events} onRefresh={refreshEvents} />}

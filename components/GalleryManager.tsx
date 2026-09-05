@@ -124,14 +124,14 @@ export default function GalleryManager({ items, onRefresh }: { items: any[]; onR
           if (!res.ok) throw new Error((await res.json().catch(() => ({})))?.error || "Gallery item save nahi hua.");
           done++;
         }
-        setMsg(files.length > 1 ? `${done} images gallery mein add ho gayi.` : "Gallery item add ho gaya.");
+        setMsg(files.length > 1 ? `${done} images gallery mein add ho gayi.` : "Gallery item add scussfully.");
       }
 
       resetForm();
       if (onRefresh) onRefresh();
       else setTimeout(() => location.reload(), 700);
     } catch (e: any) {
-      setErr(e?.message || "Save nahi ho saka. Dobara koshish karein.");
+      setErr(e?.message || "image not store.please try again.");
     } finally {
       setUploading(false);
       setUploadProgress("");
@@ -176,7 +176,7 @@ export default function GalleryManager({ items, onRefresh }: { items: any[]; onR
   }
 
   async function remove(item: any) {
-    if (!confirm(`"${item.title}" ko gallery se delete karna hai?`)) return;
+    if (!confirm(`"${item.title}" delete from gallery?`)) return;
     await fetch("/api/content/gallery", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -193,7 +193,7 @@ export default function GalleryManager({ items, onRefresh }: { items: any[]; onR
         <div>
           <h3 style={{ margin: 0 }}>{editingId ? "Edit Gallery Item" : "Add New Gallery Item"}</h3>
           <p className="muted" style={{ margin: "2px 0 0", fontSize: ".8rem" }}>
-            {editingId ? "Image aur details update karein." : "Ek ya multiple images ek sath upload karein."}
+            {editingId ? "Image aur details update karein." : "One or  multiple images  upload ."}
           </p>
         </div>
       </div>
@@ -229,8 +229,8 @@ export default function GalleryManager({ items, onRefresh }: { items: any[]; onR
               onClick={() => inputRef.current?.click()}
             >
               <UploadCloud size={26} />
-              <p><b>Click karein</b> ya images yahan drag & drop karein</p>
-              <span className="muted" style={{ fontSize: ".72rem" }}>JPG, PNG, WEBP, GIF · max 8MB per image{!editingId && " · multiple select ho sakti hain"}</span>
+              <p><b>Click here</b> drag & drop image</p>
+              <span className="muted" style={{ fontSize: ".72rem" }}>JPG, PNG, WEBP, GIF · max 8MB per image{!editingId && " · select multiple"}</span>
               <input
                 ref={inputRef}
                 type="file"

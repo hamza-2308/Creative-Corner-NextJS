@@ -5,14 +5,29 @@ import { db } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [services, packages, gallery, events] = await Promise.all([
+  const [services, packages, gallery, events, aboutContent] = await Promise.all([
     db.service.findMany({where:{active:true},take:6}),
     db.package.findMany({where:{active:true},take:3}),
     db.galleryItem.findMany({where:{visible:true},take:6,orderBy:{createdAt:"desc"}}),
-    db.event.findMany({where:{completed:true},take:3,orderBy:{date:"desc"}})
+    db.event.findMany({where:{completed:true},take:3,orderBy:{date:"desc"}}),
+    db.aboutContent.findUnique({where:{id:"about-content"}})
   ]);
+  const storyImage = aboutContent?.storyImage || "/images/about-story.svg";
   return <>
-    <section className="hero"><div className="container hero-inner">
+    <section className="hero"><div className="hero-3d-bg">
+      <div className="hero-3d-sphere s1" />
+      <div className="hero-3d-sphere s2" />
+      <div className="hero-3d-sphere s3" />
+      <div className="hero-3d-ring r1" />
+      <div className="hero-3d-ring r2" />
+      <div className="hero-3d-cube c1" />
+      <div className="hero-3d-cube c2" />
+      <div className="hero-3d-pyramid p1" />
+      <div className="hero-3d-pyramid p2" />
+      <div className="hero-3d-diamond d1" />
+      <div className="hero-3d-diamond d2" />
+      <div className="hero-3d-sparkle" />
+    </div><div className="container hero-inner">
       <div className="eyebrow">Creative Corner · Event Management</div>
       <h1>We turn your special moments into unforgettable memories.</h1>
       <p>Professional event planning and management for weddings, corporate events, parties, conferences and every celebration worth remembering.</p>
@@ -25,7 +40,7 @@ export default async function Home() {
     </div></section>
 
     <section className="section" style={{background:"#fff"}}><div className="container about">
-      <div className="about-art"><img src="/images/about-story.svg" alt="Creative Corner event styling" /></div><div><div className="eyebrow">About Creative Corner</div><h2 className="serif" style={{fontSize:"clamp(2.2rem,4vw,3.8rem)"}}>From first idea to final applause.</h2><p className="muted" style={{lineHeight:1.9}}>We bring planning, creativity and professional coordination together so you can enjoy your event instead of managing it. Our team handles the details, vendors, schedules, production and guest experience.</p>
+      <div className="about-art"><img src={storyImage} alt="Creative Corner event styling" /></div><div><div className="eyebrow">About Creative Corner</div><h2 className="serif" style={{fontSize:"clamp(2.2rem,4vw,3.8rem)"}}>From first idea to final applause.</h2><p className="muted" style={{lineHeight:1.9}}>We bring planning, creativity and professional coordination together so you can enjoy your event instead of managing it. Our team handles the details, vendors, schedules, production and guest experience.</p>
       <div className="stats"><div className="stat"><strong>8+</strong><span className="muted">Years experience</span></div><div className="stat"><strong>250+</strong><span className="muted">Events managed</span></div><div className="stat"><strong>98%</strong><span className="muted">Happy clients</span></div><div className="stat"><strong>24/7</strong><span className="muted">Event support</span></div></div>
       <br/><Link href="/about" className="btn btn-primary">Our Story <ArrowRight size={16}/></Link></div>
     </div></section>
