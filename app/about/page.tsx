@@ -19,15 +19,12 @@ export default async function About() {
 
   return (
     <>
-      <section className="page-hero about-hero">
+      <section className="page-hero">
         <Hero3D />
-        <div className="about-hero-overlay" />
-        <div className="container about-hero-content">
+        <div className="container">
           <div className="eyebrow">About Creative Corner</div>
           <h1>We make the details feel effortless.</h1>
-          <p style={{ maxWidth: 650, lineHeight: 1.8 }}>
-            A professional event management company built around creativity, reliability and unforgettable guest experiences.
-          </p>
+          <p>A professional event management company built around creativity, reliability and unforgettable guest experiences.</p>
         </div>
       </section>
 
