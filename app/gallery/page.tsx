@@ -1,11 +1,13 @@
 import { db } from "@/lib/db";
 import GalleryGrid from "@/components/GalleryGrid";
+import { Hero3D } from "@/components/Hero3D";
 
 export const dynamic = "force-dynamic";
 export default async function Gallery(){
   const items=await db.galleryItem.findMany({where:{visible:true},orderBy:{createdAt:"desc"}});
   return <>
     <section className="page-hero">
+      <Hero3D/>
       <div className="container">
         <div className="eyebrow">Event Gallery</div>
         <h1>Inspiration for your next event.</h1>
