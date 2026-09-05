@@ -20,7 +20,7 @@ export function BookingForm({services,packages,selectedService,selectedPackage}:
  <div className="field full"><label>Additional Location Details</label><textarea name="locationDetails" value={form.locationDetails} onChange={set}/></div>
  {["decoration","catering","photography","stage","lighting"].map(x=><div className="field" key={x}><label>{x[0].toUpperCase()+x.slice(1)} Requirements</label><input name={x} value={form[x]} onChange={set}/></div>)}
  <div className="field full"><label>Special Instructions</label><textarea name="specialInstructions" value={form.specialInstructions} onChange={set}/></div>
- <div className="field full"><button className="btn btn-gold" disabled={loading}>{loading?"Submitting…":"Submit Booking Request"}</button></div>
+ <div className="field full"><button className="btn btn-gold" style={{width:"100%",justifyContent:"center"}} disabled={loading}>{loading?"Submitting…":"Submit Booking Request"}</button></div>
  </div></form></div>
 }
 
